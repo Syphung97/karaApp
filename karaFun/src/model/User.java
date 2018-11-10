@@ -15,11 +15,12 @@ import model.Account;
 public class User extends Person {
     private boolean isVip;
 
-    public User(boolean isVip, String name, String add, Date dob, Account acc) {
-        super(name, add, dob, acc);
+    public User(boolean isVip, int ID, String name, String add, Date dob, Account acc) {
+        super(ID, name, add, dob, acc);
         this.isVip = isVip;
     }
 
+   
     public boolean isIsVip() {
         return isVip;
     }

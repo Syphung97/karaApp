@@ -10,12 +10,19 @@ package model;
  * @author Hau Nguyen
  */
 public class Account {
+    private final int ID;
     private String username, password;
 
-    public Account(String username, String password) {
+    public Account(int ID, String username, String password) {
+        this.ID = ID;
         this.username = username;
         this.password = password;
     }
+
+    public int getID() {
+        return ID;
+    }
+    
 
     public String getUsername() {
         return username;

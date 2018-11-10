@@ -5,11 +5,16 @@
  */
 package view;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import model.Song;
 
 /**
@@ -18,7 +23,9 @@ import model.Song;
  */
 public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
 
-    private ArrayList<JButton> listDetailBtn;
+    private ArrayList<JButton> listUpdateBtn;
+    private ArrayList<JButton> listDeleteBtn;
+
     private ArrayList<Song> listSong;
 
     /**
@@ -26,16 +33,37 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
      */
     public AdminHomeFrm() {
         initComponents();
-        listDetailBtn = new ArrayList<>();
+        listUpdateBtn = new ArrayList<>();
+        listDeleteBtn = new ArrayList<>();
         listSong = new ArrayList<>();
+
+        jtbSong.setModel(new AdminHomeTabelModel());
+        TableCellRenderer buttonRenderer = new JTableButtonRenderer();
+        jtbSong.getColumn("Update").setCellRenderer(buttonRenderer);
+        jtbSong.addMouseListener(new JTableButtonMouseListener(jtbSong));
+
+        TableCellRenderer buttonRenderer2 = new JTableButtonRenderer();
+        jtbSong.getColumn("Delete").setCellRenderer(buttonRenderer2);
+        jtbSong.addMouseListener(new JTableButtonMouseListener(jtbSong));
+        jtbSong.setRowHeight(25);
+
+        listSong.add(new Song(1, "Ok mna", "hau", "nam"));
+        JButton btnUpdate = new JButton("Update");
+        JButton btnDelete = new JButton("Delete");
+       
+        btnUpdate.addActionListener(this);
+        listUpdateBtn.add(btnUpdate);
+        
+        btnDelete.addActionListener(this);
+        listDeleteBtn.add(btnDelete);
 
     }
 
     class AdminHomeTabelModel extends DefaultTableModel {
 
-        private String[] columnNames = {"BrandID", "BrandName", "Quantity", "Total", "Option"};
-        private final Class<?>[] columnTypes = new Class<?>[]{Integer.class, Integer.class, String.class, Integer.class,
-            JButton.class};
+        private String[] columnNames = {"ID", "Name", "Author", "Single", "Update", "Delete"};
+        private final Class<?>[] columnTypes = new Class<?>[]{Integer.class, String.class, String.class, String.class,
+            JButton.class, JButton.class};
 
         @Override
         public int getColumnCount() {
@@ -62,18 +90,53 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
             /*Adding components*/
             switch (columnIndex) {
                 case 0:
-                    return listStat.get(rowIndex).getId();
+                    return listSong.get(rowIndex).getID();
                 case 1:
-                    return listStat.get(rowIndex).getName();
+                    return listSong.get(rowIndex).getName();
                 case 2:
-                    return listStat.get(rowIndex).getQuantity();
+                    return listSong.get(rowIndex).getAuthor();
                 case 3:
-                    return listStat.get(rowIndex).getTotal();
+                    return listSong.get(rowIndex).getSinger();
                 case 4:
-                    return listDetailBtn.get(rowIndex);
-
+                    return listUpdateBtn.get(rowIndex);
+                case 5:
+                    return listDeleteBtn.get(rowIndex);
                 default:
                     return "Error";
+            }
+        }
+    }
+
+    public class JTableButtonRenderer implements TableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
+            JButton button = (JButton) value;
+            return button;
+        }
+    }
+
+    public class JTableButtonMouseListener extends MouseAdapter {
+
+        private final JTable table;
+
+        public JTableButtonMouseListener(JTable table) {
+            this.table = table;
+        }
+
+        public void mouseClicked(MouseEvent e) {
+            int column = table.getColumnModel().getColumnIndexAtX(e.getX()); // get the coloum of the button
+            int row = e.getY() / table.getRowHeight(); //get the row of the button
+
+            //*Checking the row or column is valid or not
+            if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
+                Object value = table.getValueAt(row, column);
+                if (value instanceof JButton) {
+                    //perform a click event
+                    ((JButton) value).doClick();
+                    System.out.println(row + "-" + column);
+                }
             }
         }
     }
@@ -96,6 +159,7 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
         jLabel3 = new javax.swing.JLabel();
         jtSearch = new javax.swing.JTextField();
         jbSearch = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
@@ -144,6 +208,9 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setText("Songs:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,7 +236,10 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jbSearch)))
+                        .addComponent(jbSearch))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -186,9 +256,11 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jLabel3)
                     .addComponent(jtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbSearch))
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -241,6 +313,7 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton jbLogout;
