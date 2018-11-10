@@ -13,7 +13,7 @@ import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import share.User;
+import model.User;
 import share.IRMI;
 
 /**

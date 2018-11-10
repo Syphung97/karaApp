@@ -3,27 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package share;
+package model;
 
 /**
  *
- * @author Sy Phung
+ * @author Hau Nguyen
  */
-public class User {
-    String userName;
-    String password;
+public class Account {
+    private String username, password;
 
-    public User(String userName, String password) {
-        this.userName = userName;
+    public Account(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -33,5 +32,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    
     
 }
