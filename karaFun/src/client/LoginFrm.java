@@ -37,6 +37,7 @@ public class LoginFrm extends javax.swing.JFrame {
     public Account getAccount(){
         String username=txtUserName.getText();
         String password= txtPassword.getText();
+
         if(username.isEmpty()||password.isEmpty()){
             showMessage("Please fill enough information");
             return null;

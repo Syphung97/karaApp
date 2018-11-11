@@ -32,6 +32,7 @@ public class handleLogin extends Thread{
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             Account a = (Account) ois.readObject();
+
             
             Account a1 = new AccountDAO().getAccount(a.getUsername());
             
