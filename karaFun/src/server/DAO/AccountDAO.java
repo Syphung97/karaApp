@@ -41,21 +41,32 @@ public class AccountDAO extends ConnectDB {
         PreparedStatement s = conn.prepareStatement(sql);
         s.setString(1, username);
         ResultSet rs = s.executeQuery();
-        if(rs.next()){
+        if (rs.next()) {
             Account a1 = new Account(rs.getString("Username"), rs.getString("password"));
             return a1;
-        }
-        else{
+        } else {
             return null;
         }
     }
 
-    public static void insert(Account c){
-        String sql = "INSERT INTO `account` (`ID`, `AdminPersonID`, `UserPersonID`, `Username`, `Password`) VALUES (?, NULL, ?, ?, ?)";
+    public boolean insert(Account c) throws SQLException {
+        try {
+            String sql = "INSERT INTO `account` ( `Username`, `Password`) VALUES ( ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, c.getUsername());
+            ps.setString(2, c.getPassword());
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
-    public static void main(String[] args) throws SQLException {
-        AccountDAO a = new AccountDAO();
-        Account a1 = a.getAccount("tab");
-        System.out.println(a1.getPassword());
-    }
+//    public static void main(String[] args) throws SQLException {
+//        AccountDAO a = new AccountDAO();
+////        Account a1 = a.getAccount("tab");
+////        System.out.println(a1.getPassword());
+//        a.insert(new Account("", ""));
+//    }
 }
