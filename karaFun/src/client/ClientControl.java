@@ -50,9 +50,15 @@ public class ClientControl {
                 Account a2 = (Account) ois.readObject();
                 if(a2 == null){
                     loginFrm.showMessage("Account not valid! Login fail");
+                  ois.close();
+                  oos.close();
+                  socket.close();
                 }else{
 
                     loginFrm.showMessage("Login successful");
+                    ois.close();
+                    oos.close();
+                    socket.close();
 
                 }
             } catch (IOException ex) {
