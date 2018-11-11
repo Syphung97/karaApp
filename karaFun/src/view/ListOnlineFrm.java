@@ -12,77 +12,53 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import libs.JTableButtonMouseListener;
 import libs.JTableButtonRenderer;
-import libs.Table;
 import model.Account;
 import model.Room;
-import model.Song;
 import model.User;
 
 /**
  *
  * @author Tran Tuan Anh
  */
-public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
+public class ListOnlineFrm extends javax.swing.JFrame implements ActionListener{
 
     /**
-     * Creates new form ListRoomFrm
+     * Creates new form ListOnlineFrm
      */
-    private ArrayList<Room> listRoom;
-    private ArrayList<JButton> listJoinBtn;
-
-    public ListRoomFrm() {
+    private ArrayList<User> listUser;
+    private ArrayList<JButton> listInviteBtn;
+    public ListOnlineFrm() {
         initComponents();
-
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        listRoom = new ArrayList<>();
-        listJoinBtn = new ArrayList<>();
+        listUser = new ArrayList<>();
+        listInviteBtn = new ArrayList<>();
 
-        //ADD LIST ROOM...
-        ArrayList<User> listUser = new ArrayList<>();
-        listUser.add(new User(true, "ta", "hn", new Date(20), new Account("a","b")));
-
-        ArrayList<Song> listSong = new ArrayList<>();
-        listSong.add(new Song(1, "a", "a", "a"));
-        listSong.add(new Song(2, "b", "b", "b"));
-
-        listRoom.add(new Room(1, listSong, listUser));
-        listRoom.add(new Room(2, listSong, listUser));
-        listRoom.add(new Room(3, listSong, listUser));
-        /////////////////
+        //ADD LIST USER...
+        User user1 = new User(true, "ta", "hn", new Date(20), new Account("a","b"));
+        User user2 = new User(true, "ta", "hn", new Date(20), new Account("a","b"));
+        User user3 = new User(true, "ta", "hn", new Date(20), new Account("a","b"));
         
-        for (int i = 0; i < listRoom.size(); i++) {
-            JButton btnJoin = new JButton("Join");
+        listUser.add(user1);
+        listUser.add(user2);
+        listUser.add(user3);
+        //////////
+
+        for (int i = 0; i < listUser.size(); i++) {
+            JButton btnJoin = new JButton("Invite");
             btnJoin.addActionListener(this);
-            listJoinBtn.add(btnJoin);
+            listInviteBtn.add(btnJoin);
         }
 
-        jTable1.setModel(new RoomTableModel());
+        jTable1.setModel(new OnlineTableModel());
         TableCellRenderer buttonRenderer = new JTableButtonRenderer();
         jTable1.getColumn("Action").setCellRenderer(buttonRenderer);
         jTable1.addMouseListener(new JTableButtonMouseListener(jTable1));
         jTable1.setRowHeight(25);
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton btnClicked = (JButton) e.getSource();
-        for (int i = 0; i < listJoinBtn.size(); i++) {
-            if (btnClicked.equals(listJoinBtn.get(i))) {
-                btnJoinClick(listRoom.get(i));
-                
-            }
-        }
-    }
-
-    public void btnJoinClick(Room room) {
-        System.out.println("clicked" + room.getID());
-        (new RoomFrm(room)).setVisible(true);
     }
 
     /**
@@ -94,11 +70,13 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("ONLINE");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -108,30 +86,28 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
                 {null, null, null}
             },
             new String [] {
-                "ID", "Capacity", "Join"
+                "ID", "Name", "Action"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
-
-        jLabel1.setText("List Room");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(241, 241, 241)
+                .addGap(170, 170, 170)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
         );
 
         pack();
@@ -154,20 +130,20 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ListRoomFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListOnlineFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ListRoomFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListOnlineFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ListRoomFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListOnlineFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ListRoomFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListOnlineFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ListRoomFrm().setVisible(true);
+                new ListOnlineFrm().setVisible(true);
             }
         });
     }
@@ -178,10 +154,25 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    class RoomTableModel extends AbstractTableModel {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton btnClicked = (JButton) e.getSource();
+        for (int i = 0; i < listInviteBtn.size(); i++) {
+            if (btnClicked.equals(listInviteBtn.get(i))) {
+                btnInviteClick(listUser.get(i));
+                
+            }
+        }
+    }
+    
+    public void btnInviteClick(User user){
+        //SEND INVITE TO USER 
+    }
+    
+    class OnlineTableModel extends AbstractTableModel {
 
-        private String[] columnNames = {"ID", "Capacity", "Action"};
-        private final Class<?>[] columnTypes = new Class<?>[]{Integer.class, Integer.class, JButton.class};
+        private String[] columnNames = {"Name", "Action"};
+        private final Class<?>[] columnTypes = new Class<?>[]{String.class, JButton.class};
 
         @Override
         public int getColumnCount() {
@@ -190,7 +181,7 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
 
         @Override
         public int getRowCount() {
-            return listRoom.size();
+            return listUser.size();
         }
 
         @Override
@@ -208,11 +199,9 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
             /*Adding components*/
             switch (columnIndex) {
                 case 0:
-                    return listRoom.get(rowIndex).getID();
+                    return listUser.get(rowIndex).getName();
                 case 1:
-                    return listRoom.get(rowIndex).getListUser().size();
-                case 2:
-                    return listJoinBtn.get(rowIndex);
+                    return listInviteBtn.get(rowIndex);
 
                 default:
                     return "Error";
