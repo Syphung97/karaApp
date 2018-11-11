@@ -20,13 +20,16 @@ import model.Account;
  * @author Sy Phung
  */
 public class ClientControl {
-    Socket socket;
+ 
+
     LoginFrm loginFrm;
     ObjectInputStream ois;
     ObjectOutputStream oos;
 
     public ClientControl(String address, int port, LoginFrm view) throws IOException {
-        this.socket = new Socket(address, port);
+
+        
+
         
         this.loginFrm = view;
         loginFrm.addBtnLoginListener(new Login());
@@ -38,6 +41,9 @@ public class ClientControl {
         public void actionPerformed(ActionEvent e) {
             Account acc = loginFrm.getAccount();
             try {
+
+                Socket socket = new Socket("localhost", 10000);
+
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
                 oos.writeObject(acc);
@@ -45,7 +51,9 @@ public class ClientControl {
                 if(a2 == null){
                     loginFrm.showMessage("Account not valid! Login fail");
                 }else{
-                    System.out.println();
+
+                    loginFrm.showMessage("Login successful");
+
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);

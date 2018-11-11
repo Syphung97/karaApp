@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,7 +19,6 @@ import model.User;
  *
  * @author Sy Phung
  */
-
 public class ServerControl {
 
     public static int serverPortRegister = 9999;
@@ -26,7 +26,7 @@ public class ServerControl {
     public static int serverPortLogin = 10000;
     public static ArrayList<Pair<User,ArrayList<Socket>>> list = new ArrayList<>();
     public static ArrayList<handleLogin> listWorker = new ArrayList<>();
-  
+    
     public static void remove(handleLogin w){
             listWorker.remove(w);
         }
@@ -60,3 +60,4 @@ public class ServerControl {
         new ServerControl();
     }
 }
+

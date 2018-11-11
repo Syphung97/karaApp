@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,22 +12,14 @@ import java.io.Serializable;
  *
  * @author Hau Nguyen
  */
-
 public class Account implements Serializable{
-
     private String username, password;
     public static final long serialVersionUID = 1L;
 
-    public Account(int ID, String username, String password) {
-        this.ID = ID;
+    public Account(String username, String password) {
         this.username = username;
         this.password = password;
     }
-
-    public int getID() {
-        return ID;
-    }
-    
 
     public String getUsername() {
         return username;
@@ -47,3 +40,4 @@ public class Account implements Serializable{
     
     
 }
+

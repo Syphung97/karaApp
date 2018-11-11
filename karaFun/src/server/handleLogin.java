@@ -32,9 +32,11 @@ public class handleLogin extends Thread{
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             Account a = (Account) ois.readObject();
-            System.out.println(a.getUsername());
+
+            
             Account a1 = new AccountDAO().getAccount(a.getUsername());
-            if(a.equals(a1)){
+            
+            if(a1 != null && a.getPassword().equals(a1.getPassword())){
                oos.writeObject(a1); 
             }        
             else{
