@@ -5,31 +5,57 @@
  */
 package server;
 
-import java.rmi.AlreadyBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.RMIClientSocketFactory;
-import java.rmi.server.RMIServerSocketFactory;
-import java.rmi.server.UnicastRemoteObject;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.util.Pair;
 import model.User;
-import share.IRMI;
 
 /**
  *
  * @author Sy Phung
  */
-public class ServerControl extends UnicastRemoteObject implements IRMI{
-    private int port=5555;
-    private Registry registry;
+public class ServerControl {
+
+    public static int serverPortRegister = 9999;
+    public static int serverPortInvitation = 9998;
+    public static int serverPortLogin = 10000;
+    public static ArrayList<Pair<User,ArrayList<Socket>>> list = new ArrayList<>();
+    public static ArrayList<handleLogin> listWorker = new ArrayList<>();
     
-    public ServerControl() throws RemoteException, AlreadyBoundException {
+    public static void remove(handleLogin w){
+            listWorker.remove(w);
+        }
+    class ForLogin implements Runnable{
+        @Override
+        public void run() {
+            try {
+                ServerSocket serverSocket = new ServerSocket(serverPortLogin);
+                while(true){
+                    Socket s = serverSocket.accept();
+                    handleLogin w = new handleLogin(s);
+                    listWorker.add(w);
+                    w.start();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+    }
+    public ServerControl() {
         createServer();
     }
-    void createServer() throws RemoteException, AlreadyBoundException{
-        registry=LocateRegistry.createRegistry(port);
-        registry.bind("Server", this);
-    }    
 
+    void createServer() { 
+        new Thread(new ForLogin()).start();
+    }
+
+    public static void main(String[] args) {
+        new ServerControl();
+    }
 }
