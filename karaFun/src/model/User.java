@@ -13,6 +13,7 @@ import model.Account;
  * @author Sy Phung
  */
 public class User extends Person {
+
     private boolean isVip;
 
     public User(boolean isVip, int ID, String name, String add, Date dob, Account acc) {
@@ -20,7 +21,6 @@ public class User extends Person {
         this.isVip = isVip;
     }
 
-   
     public boolean isIsVip() {
         return isVip;
     }

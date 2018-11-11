@@ -5,6 +5,7 @@
  */
 package view;
 
+import controller.SongDAO;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +28,8 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
     private ArrayList<JButton> listDeleteBtn;
 
     private ArrayList<Song> listSong;
-
+    private SongDAO songDAO;
+    
     /**
      * Creates new form AdminHomeFrm
      */
@@ -36,24 +38,25 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
         listUpdateBtn = new ArrayList<>();
         listDeleteBtn = new ArrayList<>();
         listSong = new ArrayList<>();
-
+        songDAO = new SongDAO();
+        
         jtbSong.setModel(new AdminHomeTabelModel());
         TableCellRenderer buttonRenderer = new JTableButtonRenderer();
         jtbSong.getColumn("Update").setCellRenderer(buttonRenderer);
+        jtbSong.getColumn("Delete").setCellRenderer(buttonRenderer);
+
         jtbSong.addMouseListener(new JTableButtonMouseListener(jtbSong));
 
-        TableCellRenderer buttonRenderer2 = new JTableButtonRenderer();
-        jtbSong.getColumn("Delete").setCellRenderer(buttonRenderer2);
-        jtbSong.addMouseListener(new JTableButtonMouseListener(jtbSong));
+//        jtbSong.addMouseListener(new JTableButtonMouseListener(jtbSong));
         jtbSong.setRowHeight(25);
 
         listSong.add(new Song(1, "Ok mna", "hau", "nam"));
         JButton btnUpdate = new JButton("Update");
         JButton btnDelete = new JButton("Delete");
-       
+
         btnUpdate.addActionListener(this);
         listUpdateBtn.add(btnUpdate);
-        
+
         btnDelete.addActionListener(this);
         listDeleteBtn.add(btnDelete);
 
@@ -324,6 +327,12 @@ public class AdminHomeFrm extends javax.swing.JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        JButton btnClicked = (JButton) e.getSource();
+        for (int i = 0; i < listUpdateBtn.size(); i++) {
+            if (btnClicked.equals(listUpdateBtn.get(i))) {
+               
+                System.out.println("click update"+i);
+            }
+        }
     }
 }

@@ -14,13 +14,12 @@ import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import model.User;
-import share.IRMI;
 
 /**
  *
  * @author Sy Phung
  */
-public class ServerControl extends UnicastRemoteObject implements IRMI{
+public class ServerControl extends UnicastRemoteObject {
     private int port=5555;
     private Registry registry;
     
