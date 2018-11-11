@@ -14,8 +14,8 @@ import java.sql.Date;
 public class Admin extends Person {
     private String position;
 
-    public Admin(String position, int ID, String name, String add, Date dob, Account acc) {
-        super(ID, name, add, dob, acc);
+    public Admin(String position, String name, String add, Date dob, Account acc) {
+        super(name, add, dob, acc);
         this.position = position;
     }
 

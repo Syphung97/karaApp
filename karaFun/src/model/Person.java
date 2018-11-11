@@ -12,24 +12,18 @@ import java.sql.Date;
  * @author Hau Nguyen
  */
 public class Person {
-    protected final int ID;
     protected String name, add;
     protected Date dob;
     protected Account acc;
 
-    public Person(int ID, String name, String add, Date dob, Account acc) {
-        this.ID = ID;
+    public Person(String name, String add, Date dob, Account acc) {
         this.name = name;
         this.add = add;
         this.dob = dob;
         this.acc = acc;
     }
 
-    public int getID() {
-        return ID;
-    }
-
-
+ 
     public String getName() {
         return name;
     }
