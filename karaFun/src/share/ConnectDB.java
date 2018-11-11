@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class ConnectDB {
     public static Connection conn;
     private String username = "root";
-    String url = "jdbc:mysql://localhost:3306/karafun";
+    String url = "jdbc:mysql://localhost/karafun";
     String dbClass = "com.mysql.jdbc.Driver";
     public ConnectDB() {
       if(conn == null){

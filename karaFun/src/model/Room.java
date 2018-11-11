@@ -12,13 +12,21 @@ import java.util.ArrayList;
  * @author Hau Nguyen
  */
 public class Room {
+    private final int ID;
     private ArrayList<Song> listSong;
     private ArrayList<User> listUser;
 
-    public Room(ArrayList<Song> listSong, ArrayList<User> listUser) {
+    public Room(int ID, ArrayList<Song> listSong, ArrayList<User> listUser) {
+        this.ID = ID;
         this.listSong = listSong;
         this.listUser = listUser;
     }
+
+    public int getID() {
+        return ID;
+    }
+
+
 
     public ArrayList<Song> getListSong() {
         return listSong;

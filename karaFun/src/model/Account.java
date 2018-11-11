@@ -11,14 +11,22 @@ import java.io.Serializable;
  *
  * @author Hau Nguyen
  */
+
 public class Account implements Serializable{
+
     private String username, password;
     public static final long serialVersionUID = 1L;
 
-    public Account(String username, String password) {
+    public Account(int ID, String username, String password) {
+        this.ID = ID;
         this.username = username;
         this.password = password;
     }
+
+    public int getID() {
+        return ID;
+    }
+    
 
     public String getUsername() {
         return username;
