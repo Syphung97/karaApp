@@ -5,13 +5,17 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Hau Nguyen
  */
-public class Account {
-    private final int ID;
+
+public class Account implements Serializable{
+
     private String username, password;
+    public static final long serialVersionUID = 1L;
 
     public Account(int ID, String username, String password) {
         this.ID = ID;
