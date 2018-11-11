@@ -5,13 +5,23 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Hau Nguyen
  */
-public class Song {
-    private final int ID;
+public class Song implements Serializable {
+    static final long serialVersionUID = 2L;
+    private int ID;
     private String name, author, singer;
+
+    public Song(String name, String author, String singer) {
+        this.ID = 0;
+        this.name = name;
+        this.author = author;
+        this.singer = singer;
+    }
 
     public Song(int ID, String name, String author, String singer) {
         this.ID = ID;
@@ -23,8 +33,9 @@ public class Song {
     public int getID() {
         return ID;
     }
-        
     
+    
+
     public String getName() {
         return name;
     }

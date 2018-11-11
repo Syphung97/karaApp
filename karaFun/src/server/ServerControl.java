@@ -23,19 +23,24 @@ public class ServerControl {
 
     public static int serverPortRegister = 9999;
     public static int serverPortInvitation = 9998;
+    public static int serverPortSong = 9997;
     public static int serverPortLogin = 10000;
-    public static ArrayList<Pair<User,ArrayList<Socket>>> list = new ArrayList<>();
+    public static ArrayList<Pair<User, ArrayList<Socket>>> list = new ArrayList<>();
     public static ArrayList<handleLogin> listWorker = new ArrayList<>();
+    public static ArrayList<HandleSong> listHanSong = new ArrayList<>();
+
+    public static void remove(handleLogin w) {
+        listWorker.remove(w);
+    }
     
-    public static void remove(handleLogin w){
-            listWorker.remove(w);
-        }
-    class ForLogin implements Runnable{
+
+    class ForLogin implements Runnable {
+
         @Override
         public void run() {
             try {
                 ServerSocket serverSocket = new ServerSocket(serverPortLogin);
-                while(true){
+                while (true) {
                     Socket s = serverSocket.accept();
                     handleLogin w = new handleLogin(s);
                     listWorker.add(w);
@@ -46,18 +51,38 @@ public class ServerControl {
             }
         }
         
+    }
+    
+    class ForSong implements Runnable {
+
+        @Override
+        public void run() {
+            
+            try {
+                ServerSocket serverSocket = new ServerSocket(serverPortSong);
+                while (true) {
+                    Socket s = serverSocket.accept();
+                    HandleSong hs = new HandleSong(s);
+                    listHanSong.add(hs);
+                    hs.start();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
     }
+
     public ServerControl() {
         createServer();
     }
 
-    void createServer() { 
-        new Thread(new ForLogin()).start();
+    void createServer() {
+//        new Thread(new ForLogin()).start();
+        new Thread(new ForSong()).start();
     }
 
     public static void main(String[] args) {
         new ServerControl();
     }
 }
-
