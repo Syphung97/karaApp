@@ -5,7 +5,16 @@
  */
 package view;
 
+import controller.RoomDAO;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import libs.JTableButtonMouseListener;
+import libs.JTableButtonRenderer;
 import model.Room;
+import model.User;
 
 /**
  *
@@ -13,15 +22,28 @@ import model.Room;
  */
 public class RoomFrm extends javax.swing.JFrame {
 
-    private static Room room;
+    public Room room;
+    public ArrayList<User> listUsers;
+    private RoomDAO roomDAO;
     /**
      * Creates new form RoomFrm
      */
     public RoomFrm(Room room) {
         initComponents();
-        this.room = room;
         
+        initList();
+        this.room = room;
         jLabel1.setText("ROOM ID " + room.getID());
+        System.out.println("IN ROOM " + room.getID());
+        
+        jTable1.setModel(new RoomTableModel());
+        jTable1.addMouseListener(new JTableButtonMouseListener(jTable1));
+        jTable1.setRowHeight(25);
+    }
+    
+    public void initList(){
+        roomDAO = new RoomDAO();
+        listUsers = new ArrayList<>();
     }
 
     /**
@@ -108,9 +130,12 @@ public class RoomFrm extends javax.swing.JFrame {
     //INVITE
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        (new ListOnlineFrm()).setVisible(true);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public void addInviteBtnListener(ActionListener a){
+        jButton2.addActionListener(a);
+    }
     /**
      * @param args the command line arguments
      */
@@ -141,7 +166,6 @@ public class RoomFrm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RoomFrm(room).setVisible(true);
             }
         });
     }
@@ -153,4 +177,45 @@ public class RoomFrm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    class RoomTableModel extends AbstractTableModel {
+
+        private int stt = 0;
+        private String[] columnNames = {"STT", "Name"};
+        private final Class<?>[] columnTypes = new Class<?>[]{Integer.class, String.class};
+
+        @Override
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        @Override
+        public int getRowCount() {
+            return listUsers.size();
+        }
+
+        @Override
+        public String getColumnName(int columnIndex) {
+            return columnNames[columnIndex];
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            return columnTypes[columnIndex];
+        }
+
+        @Override
+        public Object getValueAt(final int rowIndex, final int columnIndex) {
+            /*Adding components*/
+            switch (columnIndex) {
+                case 0:
+                    return ++stt;
+                case 1:
+                    return listUsers.get(rowIndex).getName();
+
+                default:
+                    return "Error";
+            }
+        }
+    }
 }

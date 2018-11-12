@@ -25,10 +25,12 @@ public class ServerControl {
     public static int serverPortSong = 9997;
     public static int serverPortLogin = 10000;
     public static int serverPortSignUp = 11111;
+    public static int serverPortRoom = 11112;
     public static ArrayList<Pair<User, ArrayList<Socket>>> list = new ArrayList<>();
     public static ArrayList<handleLogin> listWorker = new ArrayList<>();
     public static ArrayList<handleSignUp> listSignUp = new ArrayList<>();
     public static ArrayList<HandleSong> listHanSong = new ArrayList<>();
+    public static ArrayList<HandleRoom> listHanRoom = new ArrayList<>();
 
     public static void remove(handleLogin w) {
         listWorker.remove(w);
@@ -95,6 +97,27 @@ public class ServerControl {
         }
         
     }
+    
+    class ForRoom implements Runnable{
+
+        @Override
+        public void run() {
+            try {
+                ServerSocket server = new ServerSocket(serverPortRoom);
+                while(true){
+                    try {
+                        Socket s = server.accept();
+                        HandleRoom hr = new HandleRoom(s);
+                        listHanRoom.add(hr);
+                        hr.start();
+                    } catch (Exception e) {
+                    }
+            }
+            } catch (Exception e) {
+            }
+        }
+        
+    }
 
     public ServerControl() {
         createServer();
@@ -104,6 +127,7 @@ public class ServerControl {
         new Thread(new ForLogin()).start();
         new Thread(new ForSignUp()).start();
         new Thread(new ForSong()).start();
+        new Thread(new ForRoom()).start();
     }
 
     public static void main(String[] args) {

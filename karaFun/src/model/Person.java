@@ -5,15 +5,16 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  *
  * @author Hau Nguyen
  */
-public class Person {
+public class Person implements Serializable{
     protected String name, add;
-    protected Date dob;
+    protected transient Date dob;
     protected Account acc;
 
     public Person(String name, String add, Date dob, Account acc) {
@@ -22,6 +23,14 @@ public class Person {
         this.dob = dob;
         this.acc = acc;
     }
+
+    public Person(String name) {
+        this.name = name;
+    }
+    
+    public Person() {
+    }
+    
 
  
     public String getName() {
