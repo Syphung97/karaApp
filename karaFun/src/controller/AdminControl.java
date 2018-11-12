@@ -5,6 +5,8 @@
  */
 package controller;
 
+import client.ClientControl;
+import client.LoginFrm;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -66,9 +68,9 @@ public class AdminControl {
         public void actionPerformed(ActionEvent e) {
             AddSongFrm addView = new AddSongFrm();
             AddSongControl addCtr = new AddSongControl(addView);
-            
+
         }
-        
+
     }
 
     class Search implements ActionListener {
@@ -79,19 +81,37 @@ public class AdminControl {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                Socket client = new Socket(host, port);
+                oos = new ObjectOutputStream(client.getOutputStream());
+                ois = new ObjectInputStream(client.getInputStream());
 
-//                socketConnect();
                 if (view.getSearchName() == null) {
                     view.showMessage("Please, enter keyword !!!");
                     return;
                 } else {
+                    System.out.println("Search");
                     oos.writeObject(new Integer(5));
                     oos.writeObject(view.getSearchName());
 
-//                    socketClose();
+                    Integer loop = (Integer) ois.readObject();
+
+//                    System.out.println(loop);
+                    ArrayList<Song> listS = new ArrayList<>();
+                    for (int i = 0; i < loop; i++) {
+                        Song s = (Song) ois.readObject();
+                        listS.add(s);
+                    }
+                    view.listSong = listS;
+                    view.updateTable();
+
+                    oos.close();
+                    client.close();
+
                 }
 
             } catch (IOException ex) {
+                Logger.getLogger(AdminControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(AdminControl.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -105,7 +125,15 @@ public class AdminControl {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("log out");
+            try {
+                System.out.println("log out");
+                LoginFrm frm = new LoginFrm();
+                ClientControl c = new ClientControl("localhost", 10000, frm);
+                frm.setVisible(true);
+                view.dispose();
+            } catch (IOException ex) {
+                Logger.getLogger(AdminControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -123,7 +151,6 @@ public class AdminControl {
 
                     UpdateSongFrm updateView = new UpdateSongFrm(s);
                     UpdateSongControl updateCtr = new UpdateSongControl(updateView);
-
 
                 }
             }

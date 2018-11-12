@@ -77,8 +77,9 @@ public class HandleSong extends Thread {
                 System.out.println("Search");
                 String search = (String) ois.readObject();
                 ArrayList<Song> searchSong = songDAO.searchSong(search);
+                oos.writeObject(new Integer(searchSong.size()));
                 for (Song song : searchSong) {
-                    System.out.println(song.getName());
+                    oos.writeObject(song);
                 }
             }
             
