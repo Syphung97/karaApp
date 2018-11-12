@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -23,11 +22,13 @@ public class ServerControl {
 
     public static int serverPortRegister = 9999;
     public static int serverPortInvitation = 9998;
+    public static int serverPortSong = 9997;
     public static int serverPortLogin = 10000;
     public static int serverPortSignUp = 11111;
     public static ArrayList<Pair<User, ArrayList<Socket>>> list = new ArrayList<>();
     public static ArrayList<handleLogin> listWorker = new ArrayList<>();
     public static ArrayList<handleSignUp> listSignUp = new ArrayList<>();
+    public static ArrayList<HandleSong> listHanSong = new ArrayList<>();
 
     public static void remove(handleLogin w) {
         listWorker.remove(w);
@@ -75,6 +76,25 @@ public class ServerControl {
         }
 
     }
+    class ForSong implements Runnable {
+
+        @Override
+        public void run() {
+            
+            try {
+                ServerSocket serverSocket = new ServerSocket(serverPortSong);
+                while (true) {
+                    Socket s = serverSocket.accept();
+                    HandleSong hs = new HandleSong(s);
+                    listHanSong.add(hs);
+                    hs.start();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
 
     public ServerControl() {
         createServer();
@@ -83,9 +103,11 @@ public class ServerControl {
     void createServer() {
         new Thread(new ForLogin()).start();
         new Thread(new ForSignUp()).start();
+        new Thread(new ForSong()).start();
     }
 
     public static void main(String[] args) {
         new ServerControl();
     }
 }
+
