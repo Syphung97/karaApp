@@ -22,6 +22,14 @@ public class User extends Person implements Serializable{
         this.isVip = isVip;
     }
 
+    public User(String name) {
+        super(name);
+    }
+    
+    public User() {
+    }
+    
+
     public boolean isIsVip() {
         return isVip;
     }

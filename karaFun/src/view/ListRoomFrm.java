@@ -5,6 +5,7 @@
  */
 package view;
 
+import controller.RoomDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
@@ -26,40 +27,21 @@ import model.User;
  *
  * @author Tran Tuan Anh
  */
-public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
+public class ListRoomFrm extends javax.swing.JFrame {
 
     /**
      * Creates new form ListRoomFrm
      */
-    private ArrayList<Room> listRoom;
-    private ArrayList<JButton> listJoinBtn;
+    public ArrayList<Room> listRoom;
+    public ArrayList<JButton> listJoinBtn;
+    private RoomDAO roomDAO;
 
     public ListRoomFrm() {
         initComponents();
-
+        roomDAO = new RoomDAO();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        listRoom = new ArrayList<>();
-        listJoinBtn = new ArrayList<>();
-
-        //ADD LIST ROOM...
-        ArrayList<User> listUser = new ArrayList<>();
-        listUser.add(new User(true, "ta", "hn", new Date(20), new Account("a","b")));
-
-        ArrayList<Song> listSong = new ArrayList<>();
-        listSong.add(new Song(1, "a", "a", "a"));
-        listSong.add(new Song(2, "b", "b", "b"));
-
-        listRoom.add(new Room(1, listSong, listUser));
-        listRoom.add(new Room(2, listSong, listUser));
-        listRoom.add(new Room(3, listSong, listUser));
-        /////////////////
-        
-        for (int i = 0; i < listRoom.size(); i++) {
-            JButton btnJoin = new JButton("Join");
-            btnJoin.addActionListener(this);
-            listJoinBtn.add(btnJoin);
-        }
+        initList();
 
         jTable1.setModel(new RoomTableModel());
         TableCellRenderer buttonRenderer = new JTableButtonRenderer();
@@ -68,22 +50,20 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
         jTable1.setRowHeight(25);
 
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JButton btnClicked = (JButton) e.getSource();
-        for (int i = 0; i < listJoinBtn.size(); i++) {
-            if (btnClicked.equals(listJoinBtn.get(i))) {
-                btnJoinClick(listRoom.get(i));
-                
-            }
+    
+    public void initList() {
+        listJoinBtn = new ArrayList<>();
+        listRoom = new ArrayList<>();
+        
+    }
+    public void addJoinBtn(){
+        for (int i = 0; i < listRoom.size(); i++) {
+            JButton btnJoin = new JButton("Join");
+            listJoinBtn.add(btnJoin);
         }
     }
 
-    public void btnJoinClick(Room room) {
-        System.out.println("clicked" + room.getID());
-        (new RoomFrm(room)).setVisible(true);
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -210,7 +190,7 @@ public class ListRoomFrm extends javax.swing.JFrame implements ActionListener {
                 case 0:
                     return listRoom.get(rowIndex).getID();
                 case 1:
-                    return listRoom.get(rowIndex).getListUser().size();
+                    return listRoom.get(rowIndex).getCapacity();
                 case 2:
                     return listJoinBtn.get(rowIndex);
 
