@@ -10,7 +10,7 @@ package view;
  * @author Tran Tuan Anh
  */
 public class InvitationFrm extends javax.swing.JFrame {
-
+    
     private static String senderName;
     /**
      * Creates new form InvitationFrm

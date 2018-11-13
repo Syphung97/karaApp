@@ -17,10 +17,12 @@ public class User extends Person implements Serializable{
 
     private boolean isVip;
 
-    public User(boolean isVip, String name,Account acc) {
-        super( name, acc);
+    public User(boolean isVip, String name, String add, Date dob, Account acc) {
+        super(name, add, dob, acc);
         this.isVip = isVip;
     }
+
+    
 
     public User(String name) {
         super(name);

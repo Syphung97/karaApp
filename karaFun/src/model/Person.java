@@ -13,19 +13,18 @@ import java.sql.Date;
  * @author Hau Nguyen
  */
 public class Person implements Serializable{
-//<<<<<<< HEAD
-    protected String name;
-;
-//=======
-//    protected String name, add;
-//    protected transient Date dob;
-//>>>>>>> origin/master
+    protected String name, add;
+    protected transient Date dob;
     protected Account acc;
 
-    public Person(String name, Account acc) {
+    public Person(String name, String add, Date dob, Account acc) {
         this.name = name;
+        this.add = add;
+        this.dob = dob;
         this.acc = acc;
     }
+
+    
 
     public Person(String name) {
         this.name = name;
