@@ -5,21 +5,20 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  *
  * @author Hau Nguyen
  */
-public class Person {
-    protected String name, add;
-    protected Date dob;
+public class Person implements Serializable{
+    protected String name;
+;
     protected Account acc;
 
-    public Person(String name, String add, Date dob, Account acc) {
+    public Person(String name, Account acc) {
         this.name = name;
-        this.add = add;
-        this.dob = dob;
         this.acc = acc;
     }
 
@@ -32,22 +31,7 @@ public class Person {
         this.name = name;
     }
 
-    public String getAdd() {
-        return add;
-    }
-
-    public void setAdd(String add) {
-        this.add = add;
-    }
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
-
+   
     public Account getAcc() {
         return acc;
     }

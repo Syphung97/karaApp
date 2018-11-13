@@ -5,13 +5,18 @@
  */
 package server;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
+import model.Account;
+import model.Invitation;
 import model.User;
 
 /**
@@ -25,7 +30,7 @@ public class ServerControl {
     public static int serverPortSong = 9997;
     public static int serverPortLogin = 10000;
     public static int serverPortSignUp = 11111;
-    public static ArrayList<Pair<User, ArrayList<Socket>>> list = new ArrayList<>();
+    public static ArrayList<Pair<Account, ArrayList<Socket>>> list = new ArrayList<>();
     public static ArrayList<handleLogin> listWorker = new ArrayList<>();
     public static ArrayList<handleSignUp> listSignUp = new ArrayList<>();
     public static ArrayList<HandleSong> listHanSong = new ArrayList<>();
@@ -36,6 +41,105 @@ public class ServerControl {
 
     public static void removeSU(handleSignUp h) {
         listSignUp.remove(h);
+    }
+
+    public static class AddCustomer implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                ServerSocket serverRegister = new ServerSocket(serverPortRegister);
+                ServerSocket svRec = new ServerSocket(9900);
+                while (true) {
+                    try {
+                        Socket clientRegister = serverRegister.accept();
+                        Socket re = svRec.accept();
+                        ObjectInputStream in = new ObjectInputStream(clientRegister.getInputStream());
+                        Account customer = (Account) in.readObject();                       
+                        ArrayList<Socket> listSockets = new ArrayList<>();
+                        listSockets.add(clientRegister);
+                        
+                        listSockets.add(re);
+
+                        list.add(new Pair(customer, listSockets));
+                        System.out.println(list.size());
+                        
+                       
+
+                    } catch (IOException | ClassNotFoundException e) {
+                    }
+                }
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    public class CheckInvitation extends Thread{
+
+        @Override
+        public void run() {
+            try {
+                ServerSocket ss = new ServerSocket(9998);
+                
+                while(true){
+                    Socket s = ss.accept();
+                    // Đọc lời mời
+                    ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+                    Invitation i = (Invitation) ois.readObject();
+                    
+                    for (Pair<Account, ArrayList<Socket>> pair : list) {
+                        if(i.getReceive().equals(pair.getKey().getUsername())){
+                            Socket client = (Socket)((ArrayList)pair.getValue()).get(1);
+                            // Gửi lời mời thông qua socket của thằng nhận
+                            DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                            dos.writeUTF("Invite from "+i.getSend().getUsername());
+                        }
+                    }
+//                    DataInputStream dis = new DataInputStream(s.getInputStream());
+//                    System.out.println(dis.readInt());
+                    System.out.println(i.getReceive());
+                    DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                    dos.writeUTF(i.getSend().getUsername());
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+    public static class CheckConnection implements Runnable {
+
+        @Override
+        public void run() {
+
+            while (true) {
+                int index = -1;
+                try {
+                    for (int i = 0; i < list.size(); i++) {
+                        index = i;
+                        //check connection
+                        DataOutputStream out = new DataOutputStream(list.get(i).getValue().get(0).getOutputStream());
+                        out.writeBoolean(true);
+//                        System.out.println("checking connection");
+
+                    }
+
+                } catch (IOException e) {
+                    list.remove(index);
+                    System.out.println("REMOVED CLIENT FROM LIST");
+                }
+
+                try {
+                    Thread.sleep(1000);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     class ForLogin implements Runnable {
@@ -76,11 +180,12 @@ public class ServerControl {
         }
 
     }
+
     class ForSong implements Runnable {
 
         @Override
         public void run() {
-            
+
             try {
                 ServerSocket serverSocket = new ServerSocket(serverPortSong);
                 while (true) {
@@ -93,7 +198,7 @@ public class ServerControl {
                 Logger.getLogger(ServerControl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
     }
 
     public ServerControl() {
@@ -104,10 +209,17 @@ public class ServerControl {
         new Thread(new ForLogin()).start();
         new Thread(new ForSignUp()).start();
         new Thread(new ForSong()).start();
+        new CheckInvitation().start();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         new ServerControl();
+        Thread addCustomer = new Thread(new AddCustomer());
+        addCustomer.start();
+        Thread.sleep(100);
+        Thread checkConnection = new Thread(new CheckConnection());
+        checkConnection.start();
+        
+        
     }
 }
-

@@ -15,7 +15,7 @@ public class Admin extends Person {
     private String position;
 
     public Admin(String position, String name, String add, Date dob, Account acc) {
-        super(name, add, dob, acc);
+        super(name, acc);
         this.position = position;
     }
 

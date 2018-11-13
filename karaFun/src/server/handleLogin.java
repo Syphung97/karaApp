@@ -40,11 +40,11 @@ public class handleLogin extends Thread{
             Account a1 = new AccountDAO().getAccount(a.getUsername());
             
             if(a1 != null && a.getPassword().equals(a1.getPassword())){
-               oos.writeObject(a1); 
-                User s = new User(false,"","",null, a1);
-                ArrayList<Socket> al = new ArrayList<>();
-                Pair p = new Pair(s, al);
-                ServerControl.list.add(p);
+                oos.writeObject(a1); 
+//                User s = new User(false,"","",null, a1);
+//                ArrayList<Socket> al = new ArrayList<>();
+//                Pair p = new Pair(s, al);
+//                ServerControl.list.add(p);
             }        
             else{
                 oos.writeObject(null);

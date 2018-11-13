@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import model.Account;
 
@@ -12,12 +13,12 @@ import model.Account;
  *
  * @author Sy Phung
  */
-public class User extends Person {
+public class User extends Person implements Serializable{
 
     private boolean isVip;
 
-    public User(boolean isVip, String name, String add, Date dob, Account acc) {
-        super( name, add, dob, acc);
+    public User(boolean isVip, String name,Account acc) {
+        super( name, acc);
         this.isVip = isVip;
     }
 

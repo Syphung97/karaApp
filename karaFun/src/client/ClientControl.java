@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
+import model.User;
 
 /**
  *
@@ -29,11 +30,7 @@ public class ClientControl {
     ObjectInputStream ois;
     ObjectOutputStream oos;
 
-    public ClientControl(String address, int port, LoginFrm view) throws IOException {
-
-        
-
-        
+    public ClientControl(String address, int port, LoginFrm view) throws IOException {        
         this.loginFrm = view;
         loginFrm.addBtnLoginListener(new Login());
         loginFrm.addBtnSignupListener(new SignUp());
@@ -65,8 +62,8 @@ public class ClientControl {
                     oos.close();
                     socket.close();
                     loginFrm.setVisible(false);
-                    System.exit(0);
-                    
+                   // sau khi login  
+                    new InviteControl(new InviteFrm(), a2).start();
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ClientControl.class.getName()).log(Level.SEVERE, null, ex);
